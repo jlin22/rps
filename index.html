@@ -1,5 +1,15 @@
 <!DOCTYPE html>
 <html>
+<body>
+<p>Your Choice</p>
+<div id="buttons">
+	<input id="rock" type="submit" value="rock">
+	<input id="paper" type="submit" value="paper">
+	<input id="scissors" type="submit" value="scissors">
+</div>
+<div id="log">
+</div>
+</body>
 <script>
 	const values = ["rock", "paper", "scissors"];
 	const cycle = {
@@ -12,22 +22,29 @@
 		return values[Math.floor(Math.random() * 3)];
 	}
 		
-	function parseInput(input) {
-		return input.trim().toLowerCase();
-	}
-	
-	function playRound(playerChoice, computerChoice) {
+	function playRound(playerChoice, computerChoice, outcome) {
 		if (playerChoice == computerChoice) {
-			console.log("tie! you both chose " + playerChoice);
+			outcome.textContent += "Tie! You both chose " + playerChoice;
 			return 0;
 		}
 		if (cycle[playerChoice] == computerChoice) {
-			console.log("you win! " + playerChoice + " beats " + computerChoice);
+			outcome.textContent += "You Win! " + playerChoice + " beats " + computerChoice;
 			return 1;
 		}
 		else {
-			console.log("you lose! " + computerChoice + " beats " + playerChoice);
+			outcome.textContent = "You Lose! " + computerChoice + " beats " + playerChoice;
 			return -1;
+		}
+	}
+
+	function processRound(playerChoice, round, log, scoreDisplay, yourScore) {
+		if (round++ < 5) {
+			var outcome = document.createElement('p');
+			outcome.textDisplay = "Round " + round + ": ";
+			if (playRound(playerChoice, computerPlay(), outcome) == 1)
+				yourScore++;
+			log.appendChild(outcome);
+			scoreDisplay.textContent = "Your Score: " + yourScore;
 		}
 	}
 
@@ -35,15 +52,18 @@
 		var round = 0;
 		var yourScore = 0;
 		var playerChoice = "rock";
+		var scoreDisplay = document.createElement('p');
+		scoreDisplay.textContent = "Your Score: " + yourScore;
+		var log = document.querySelector('#log');
+		log.appendChild(scoreDisplay);
+		
+		var rock = document.querySelector('#rock');
+		var scissors = document.querySelector('#scissors');
+		var paper = document.querySelector('#paper');
+		rock.addEventListener('click', processRound("rock", round, log, scoreDisplay, yourScore));
+		scissors.addEventListener('click', processRound("scissors", round, log, scoreDisplay, yourScore));
+		paper.addEventListener('click', processRound("paper", round, log, scoreDisplay, yourScore));
 
-		while (round < 5) {
-			playerChoice = prompt("what is your choice?", "rock");
-			playerChoice = parseInput(playerChoice);
-			if (playRound(playerChoice, computerPlay()) == 1)
-				yourScore++;
-			round++;
-		}
-		console.log("Your score is " + yourScore);
 	}
 
 	game();
