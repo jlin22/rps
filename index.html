@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<script>
+	const values = ["rock", "paper", "scissors"];
+	const cycle = {
+		"paper": "rock",
+		"scissors": "paper",
+		"rock": "scissors"
+	};
+
+	function computerPlay() {
+		return values[Math.floor(Math.random() * 3)];
+	}
+		
+	function parseInput(input) {
+		return input.trim().toLowerCase();
+	}
+	
+	function playRound(playerChoice, computerChoice) {
+		if (playerChoice == computerChoice) {
+			console.log("tie! you both chose " + playerChoice);
+			return 0;
+		}
+		if (cycle[playerChoice] == computerChoice) {
+			console.log("you win! " + playerChoice + " beats " + computerChoice);
+			return 1;
+		}
+		else {
+			console.log("you lose! " + computerChoice + " beats " + playerChoice);
+			return -1;
+		}
+	}
+
+	function game() {
+		var round = 0;
+		var yourScore = 0;
+		var playerChoice = "rock";
+
+		while (round < 5) {
+			playerChoice = prompt("what is your choice?", "rock");
+			playerChoice = parseInput(playerChoice);
+			if (playRound(playerChoice, computerPlay()) == 1)
+				yourScore++;
+			round++;
+		}
+		console.log("Your score is " + yourScore);
+	}
+
+	game();
+</script>
+</html>
